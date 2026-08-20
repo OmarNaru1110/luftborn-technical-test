@@ -1,0 +1,101 @@
+<mxfile host="Electron" pages="2">
+  <diagram id="iiy-hSGQaoBuIRQJkDoe" name="ERD">
+    <mxGraphModel dx="1212" dy="736" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="yfHknwQ0yBAyau_GK6tr-12" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="150" width="581.25" x="160" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="yfHknwQ0yBAyau_GK6tr-1" parent="yfHknwQ0yBAyau_GK6tr-12" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Song" vertex="1">
+          <mxGeometry height="150" width="150" x="431.25" as="geometry" />
+        </mxCell>
+        <mxCell id="yfHknwQ0yBAyau_GK6tr-6" edge="1" parent="yfHknwQ0yBAyau_GK6tr-12" source="yfHknwQ0yBAyau_GK6tr-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="yfHknwQ0yBAyau_GK6tr-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="yfHknwQ0yBAyau_GK6tr-2" parent="yfHknwQ0yBAyau_GK6tr-12" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Playlist" vertex="1">
+          <mxGeometry height="150" width="150" as="geometry" />
+        </mxCell>
+        <mxCell id="yfHknwQ0yBAyau_GK6tr-8" parent="yfHknwQ0yBAyau_GK6tr-12" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="M" vertex="1">
+          <mxGeometry height="37.5" width="37.5" x="150" y="37.5" as="geometry" />
+        </mxCell>
+        <mxCell id="yfHknwQ0yBAyau_GK6tr-10" edge="1" parent="yfHknwQ0yBAyau_GK6tr-12" source="yfHknwQ0yBAyau_GK6tr-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" target="yfHknwQ0yBAyau_GK6tr-9" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="75" as="sourcePoint" />
+            <mxPoint x="431.25" y="75" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yfHknwQ0yBAyau_GK6tr-9" parent="yfHknwQ0yBAyau_GK6tr-12" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;" value="has" vertex="1">
+          <mxGeometry height="75" width="75" x="253.13" y="37.5" as="geometry" />
+        </mxCell>
+        <mxCell id="yfHknwQ0yBAyau_GK6tr-11" parent="yfHknwQ0yBAyau_GK6tr-12" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="N" vertex="1">
+          <mxGeometry height="37.5" width="37.5" x="393.75" y="37.5" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="Mapping" id="m7zVPmYJiSwHMeIr6qKo">
+    <mxGraphModel dx="1030" dy="626" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="euOhFASD-hHJIaBVS_99-1" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Song" vertex="1">
+          <mxGeometry height="80" width="200" x="640" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-21" parent="euOhFASD-hHJIaBVS_99-1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;u&gt;Id&lt;/u&gt;" vertex="1">
+          <mxGeometry height="20" width="200" y="23" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-22" parent="euOhFASD-hHJIaBVS_99-1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="Title" vertex="1">
+          <mxGeometry height="20" width="200" y="43" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-23" parent="euOhFASD-hHJIaBVS_99-1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="Artist" vertex="1">
+          <mxGeometry height="20" width="200" y="63" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-8" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="Playlist" vertex="1">
+          <mxGeometry height="100" width="200" x="70" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-9" parent="euOhFASD-hHJIaBVS_99-8" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;u&gt;Id&lt;/u&gt;" vertex="1">
+          <mxGeometry height="20" width="200" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-11" parent="euOhFASD-hHJIaBVS_99-8" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="Name" vertex="1">
+          <mxGeometry height="20" width="200" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-12" parent="euOhFASD-hHJIaBVS_99-8" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="CreatedAt" vertex="1">
+          <mxGeometry height="20" width="200" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-20" connectable="0" parent="euOhFASD-hHJIaBVS_99-8" style="group" value="" vertex="1">
+          <mxGeometry height="20" width="200" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-10" parent="euOhFASD-hHJIaBVS_99-20" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="UserId" vertex="1">
+          <mxGeometry height="20" width="200" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-16" edge="1" parent="euOhFASD-hHJIaBVS_99-20" style="endArrow=none;dashed=1;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="5" y="16.970000000000013" as="sourcePoint" />
+            <mxPoint x="35" y="16.970000000000013" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-31" parent="1" style="swimlane;whiteSpace=wrap;html=1;" value="PlaylistSong" vertex="1">
+          <mxGeometry height="60" width="200" x="350" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-32" parent="euOhFASD-hHJIaBVS_99-31" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;u&gt;SongId&lt;/u&gt;" vertex="1">
+          <mxGeometry height="20" width="200" y="23" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-33" parent="euOhFASD-hHJIaBVS_99-31" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;u&gt;PlaylistId&lt;/u&gt;" vertex="1">
+          <mxGeometry height="20" width="200" y="43" as="geometry" />
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-35" edge="1" parent="1" source="euOhFASD-hHJIaBVS_99-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="euOhFASD-hHJIaBVS_99-21" value=" ">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="113.03" />
+              <mxPoint x="590" y="293.03" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="euOhFASD-hHJIaBVS_99-36" edge="1" parent="1" source="euOhFASD-hHJIaBVS_99-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="euOhFASD-hHJIaBVS_99-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
