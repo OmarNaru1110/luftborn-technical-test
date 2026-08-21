@@ -27,7 +27,7 @@ namespace API.Controllers
             {
                 return BadRequest(result.Message);
             }
-            return Ok(result.Data);
+            return Created((string?)null, result.Data);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPlaylistAsync(int id)
