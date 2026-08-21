@@ -1,5 +1,6 @@
 ﻿using CORE.DTOs;
 using CORE.DTOs.Playlist;
+using CORE.Enums;
 using CORE.Services.IServices;
 using DATA.DataAccess.Repositories.UnitOfWork;
 using DATA.Models;
@@ -31,7 +32,7 @@ namespace CORE.Services
                 _logger.LogWarning("No songs provided for playlist {PlaylistId}", playlistId);
                 return new ResponseDto<PlaylistDto>
                 {
-                    IsSuccess = false,
+                    Status = ResultStatus.Invalid,
                     Message = "No songs provided"
                 };
             }
@@ -43,7 +44,7 @@ namespace CORE.Services
                 _logger.LogWarning($"Playlist with Id {playlistId} not found.");
                 return new ResponseDto<PlaylistDto>
                 {
-                    IsSuccess = false,
+                    Status = ResultStatus.NotFound,
                     Message = "Playlist not found"
                 };
             }
@@ -62,7 +63,7 @@ namespace CORE.Services
 
                 return new ResponseDto<PlaylistDto>
                 {
-                    IsSuccess = true,
+                    Status = ResultStatus.Success,
                     Data = new PlaylistDto
                     {
                         Id = playlist.Id,
@@ -92,7 +93,7 @@ namespace CORE.Services
                 playlistId);
             return new ResponseDto<PlaylistDto>
             {
-                IsSuccess = true,
+                Status = ResultStatus.Success,
                 Data = new PlaylistDto
                 {
                     Id = playlist.Id,
@@ -116,7 +117,7 @@ namespace CORE.Services
                 _logger.LogError("User Id is null. Cannot create playlist.");
                 return new ResponseDto<PlaylistDto>
                 {
-                    IsSuccess = false,
+                    Status = ResultStatus.Invalid,
                     Message = "user Id is null"
                 };
             }
@@ -136,7 +137,7 @@ namespace CORE.Services
 
             return new ResponseDto<PlaylistDto>
             {
-                IsSuccess = true,
+                Status = ResultStatus.Success,
                 Data = result.Data
             };
         }
@@ -150,7 +151,7 @@ namespace CORE.Services
                 _logger.LogWarning($"Playlist with Id {playlistId} not found.");
                 return new ResponseDto<object>
                 {
-                    IsSuccess = false,
+                    Status = ResultStatus.NotFound,
                     Message = "Playlist not found"
                 };
             }
@@ -161,7 +162,7 @@ namespace CORE.Services
             _logger.LogInformation("Playlist with Id {PlaylistId} deleted successfully.", playlistId);
             return new ResponseDto<object>
             {
-                IsSuccess = true,
+                Status = ResultStatus.Success,
                 Data = null
             };
         }
@@ -177,14 +178,14 @@ namespace CORE.Services
                 _logger.LogWarning($"Playlist with Id {id} not found.");
                 return new ResponseDto<PlaylistDto>
                 {
-                    IsSuccess = false,
+                    Status = ResultStatus.NotFound,
                     Message = "Playlist not found"
                 };
             }
 
             return new ResponseDto<PlaylistDto>
             {
-                IsSuccess = true,
+                Status = ResultStatus.Success,
                 Data = new PlaylistDto
                 {
                     Id = playlist.Id,
@@ -211,7 +212,7 @@ namespace CORE.Services
                 _logger.LogWarning($"Playlist with Id {playlistId} not found.");
                 return new ResponseDto<PlaylistDto>
                 {
-                    IsSuccess = false,
+                    Status = ResultStatus.NotFound,
                     Message = "Playlist not found"
                 };
             }
@@ -225,7 +226,7 @@ namespace CORE.Services
 
             return new ResponseDto<PlaylistDto>
             {
-                IsSuccess = true,
+                Status = ResultStatus.Success,
                 Data = result.Data
             };
         }

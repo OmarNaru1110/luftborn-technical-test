@@ -1,4 +1,5 @@
 ﻿using CORE.DTOs;
+using CORE.Enums;
 using CORE.Services.IServices;
 using DATA.DataAccess.Repositories.UnitOfWork;
 using Microsoft.Extensions.Logging;
@@ -30,7 +31,7 @@ namespace CORE.Services
                     Artist = song.Artist
                 })
                 .ToList();
-            return new ResponseDto<IEnumerable<SongDto>> { IsSuccess = true, Data = songDtos };
+            return new ResponseDto<IEnumerable<SongDto>> { Status = ResultStatus.Success, Data = songDtos };
         }
 
         public async Task<ResponseDto<SongDto>> GetSongAsync(int songId)
@@ -41,10 +42,10 @@ namespace CORE.Services
             if(song == null)
             {
                 _logger.LogWarning($"Song with ID: {songId} not found.");
-                return new ResponseDto<SongDto> { IsSuccess = false, Message = "Song not found." };
+                return new ResponseDto<SongDto> { Status = ResultStatus.NotFound, Message = "Song not found." };
             }
             return new ResponseDto<SongDto> { 
-                IsSuccess = true, 
+                Status = ResultStatus.Success, 
                 Data = new SongDto
                 {
                     Id = song.Id,

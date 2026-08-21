@@ -1,5 +1,6 @@
 using API.Controllers;
 using CORE.DTOs;
+using CORE.Enums;
 using CORE.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -21,7 +22,7 @@ namespace UnitTests.Api.Controllers
             var song = new SongDto { Id = 3, Title = "Clocks", Artist = "Coldplay" };
             _songService
                 .Setup(s => s.GetSongAsync(3))
-                .ReturnsAsync(new ResponseDto<SongDto> { IsSuccess = true, Data = song });
+                .ReturnsAsync(new ResponseDto<SongDto> { Status = ResultStatus.Success, Data = song });
 
             var response = await CreateSut().GetSongAsync(3);
 
@@ -37,7 +38,7 @@ namespace UnitTests.Api.Controllers
         {
             _songService
                 .Setup(s => s.GetSongAsync(404))
-                .ReturnsAsync(new ResponseDto<SongDto> { IsSuccess = false, Message = "Song not found." });
+                .ReturnsAsync(new ResponseDto<SongDto> { Status = ResultStatus.NotFound, Message = "Song not found." });
 
             var response = await CreateSut().GetSongAsync(404);
 
@@ -58,7 +59,7 @@ namespace UnitTests.Api.Controllers
             };
             _songService
                 .Setup(s => s.GetAllSongsAsync())
-                .ReturnsAsync(new ResponseDto<IEnumerable<SongDto>> { IsSuccess = true, Data = songs });
+                .ReturnsAsync(new ResponseDto<IEnumerable<SongDto>> { Status = ResultStatus.Success, Data = songs });
 
             var response = await CreateSut().GetAllSongsAsync();
 
@@ -75,7 +76,7 @@ namespace UnitTests.Api.Controllers
         {
             _songService
                 .Setup(s => s.GetAllSongsAsync())
-                .ReturnsAsync(new ResponseDto<IEnumerable<SongDto>> { IsSuccess = true, Data = [] });
+                .ReturnsAsync(new ResponseDto<IEnumerable<SongDto>> { Status = ResultStatus.Success, Data = [] });
 
             var response = await CreateSut().GetAllSongsAsync();
 

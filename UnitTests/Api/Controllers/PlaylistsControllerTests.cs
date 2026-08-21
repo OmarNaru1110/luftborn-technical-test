@@ -2,6 +2,7 @@ using API.Controllers;
 using API.Services;
 using CORE.DTOs;
 using CORE.DTOs.Playlist;
+using CORE.Enums;
 using CORE.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -33,7 +34,7 @@ namespace UnitTests.Api.Controllers
             var dto = new PlaylistDto { Id = 1, Name = "Mix", UserId = 1 };
             _playlistService
                 .Setup(s => s.CreatePlaylistAsync(It.IsAny<CreatePlaylistDto>(), It.IsAny<int?>()))
-                .ReturnsAsync(new ResponseDto<PlaylistDto> { IsSuccess = true, Data = dto });
+                .ReturnsAsync(new ResponseDto<PlaylistDto> { Status = ResultStatus.Success, Data = dto });
 
             var response = await CreateSut().CreatePlaylistAsync(new CreatePlaylistDto { Name = "Mix" });
 
@@ -49,7 +50,7 @@ namespace UnitTests.Api.Controllers
         {
             _playlistService
                 .Setup(s => s.CreatePlaylistAsync(It.IsAny<CreatePlaylistDto>(), It.IsAny<int?>()))
-                .ReturnsAsync(new ResponseDto<PlaylistDto> { IsSuccess = false, Message = "user Id is null" });
+                .ReturnsAsync(new ResponseDto<PlaylistDto> { Status = ResultStatus.Invalid, Message = "user Id is null" });
 
             var response = await CreateSut().CreatePlaylistAsync(new CreatePlaylistDto());
 
@@ -66,7 +67,7 @@ namespace UnitTests.Api.Controllers
             var dto = new CreatePlaylistDto { Name = "Road Trip" };
             _playlistService
                 .Setup(s => s.CreatePlaylistAsync(dto, 1))
-                .ReturnsAsync(new ResponseDto<PlaylistDto> { IsSuccess = true, Data = new PlaylistDto() });
+                .ReturnsAsync(new ResponseDto<PlaylistDto> { Status = ResultStatus.Success, Data = new PlaylistDto() });
 
             await CreateSut().CreatePlaylistAsync(dto);
 
@@ -83,7 +84,7 @@ namespace UnitTests.Api.Controllers
             var playlist = new PlaylistDto { Id = 4, Name = "Chill" };
             _playlistService
                 .Setup(s => s.GetPlaylistAsync(4))
-                .ReturnsAsync(new ResponseDto<PlaylistDto> { IsSuccess = true, Data = playlist });
+                .ReturnsAsync(new ResponseDto<PlaylistDto> { Status = ResultStatus.Success, Data = playlist });
 
             var response = await CreateSut().GetPlaylistAsync(4);
 
@@ -99,7 +100,7 @@ namespace UnitTests.Api.Controllers
         {
             _playlistService
                 .Setup(s => s.GetPlaylistAsync(404))
-                .ReturnsAsync(new ResponseDto<PlaylistDto> { IsSuccess = false, Message = "Playlist not found" });
+                .ReturnsAsync(new ResponseDto<PlaylistDto> { Status = ResultStatus.NotFound, Message = "Playlist not found" });
 
             var response = await CreateSut().GetPlaylistAsync(404);
 
@@ -120,7 +121,7 @@ namespace UnitTests.Api.Controllers
             var data = new PlaylistDto { Id = 2, Name = "Gym", Songs = new[] { new SongDto { Id = 9 } } };
             _playlistService
                 .Setup(s => s.AddSongsToPlaylistAsync(2, It.IsAny<List<int>>()))
-                .ReturnsAsync(new ResponseDto<PlaylistDto> { IsSuccess = true, Data = data });
+                .ReturnsAsync(new ResponseDto<PlaylistDto> { Status = ResultStatus.Success, Data = data });
 
             var response = await CreateSut().AddSongsToPlaylist(2, new List<int> { 9 });
 
@@ -136,7 +137,7 @@ namespace UnitTests.Api.Controllers
         {
             _playlistService
                 .Setup(s => s.AddSongsToPlaylistAsync(2, It.IsAny<List<int>>()))
-                .ReturnsAsync(new ResponseDto<PlaylistDto> { IsSuccess = false, Message = "No songs provided" });
+                .ReturnsAsync(new ResponseDto<PlaylistDto> { Status = ResultStatus.Invalid, Message = "No songs provided" });
 
             var response = await CreateSut().AddSongsToPlaylist(2, new List<int>());
 
@@ -153,7 +154,7 @@ namespace UnitTests.Api.Controllers
             var songIds = new List<int> { 5, 6 };
             _playlistService
                 .Setup(s => s.AddSongsToPlaylistAsync(3, songIds))
-                .ReturnsAsync(new ResponseDto<PlaylistDto> { IsSuccess = true, Data = new PlaylistDto() });
+                .ReturnsAsync(new ResponseDto<PlaylistDto> { Status = ResultStatus.Success, Data = new PlaylistDto() });
 
             await CreateSut().AddSongsToPlaylist(3, songIds);
 
@@ -169,7 +170,7 @@ namespace UnitTests.Api.Controllers
         {
             _playlistService
                 .Setup(s => s.DeletePlaylistAsync(7))
-                .ReturnsAsync(new ResponseDto<object> { IsSuccess = true });
+                .ReturnsAsync(new ResponseDto<object> { Status = ResultStatus.Success });
 
             var response = await CreateSut().DeletePlaylistAsync(7);
 
@@ -181,7 +182,7 @@ namespace UnitTests.Api.Controllers
         {
             _playlistService
                 .Setup(s => s.DeletePlaylistAsync(7))
-                .ReturnsAsync(new ResponseDto<object> { IsSuccess = false, Message = "Playlist not found" });
+                .ReturnsAsync(new ResponseDto<object> { Status = ResultStatus.NotFound, Message = "Playlist not found" });
 
             var response = await CreateSut().DeletePlaylistAsync(7);
 
@@ -202,7 +203,7 @@ namespace UnitTests.Api.Controllers
             var updated = new PlaylistDto { Id = 8, Name = "Renamed" };
             _playlistService
                 .Setup(s => s.UpdatePlaylistAsync(8, It.IsAny<UpdatePlaylistDto>()))
-                .ReturnsAsync(new ResponseDto<PlaylistDto> { IsSuccess = true, Data = updated });
+                .ReturnsAsync(new ResponseDto<PlaylistDto> { Status = ResultStatus.Success, Data = updated });
 
             var response = await CreateSut().UpdatePlaylistAsync(8, new UpdatePlaylistDto { Name = "Renamed" });
 
@@ -214,18 +215,18 @@ namespace UnitTests.Api.Controllers
         }
 
         [Test]
-        public async Task UpdatePlaylist_Failure_ReturnsBadRequestWithMessage()
+        public async Task UpdatePlaylist_Failure_ReturnsNotFoundWithMessage()
         {
             _playlistService
                 .Setup(s => s.UpdatePlaylistAsync(8, It.IsAny<UpdatePlaylistDto>()))
-                .ReturnsAsync(new ResponseDto<PlaylistDto> { IsSuccess = false, Message = "Playlist not found" });
+                .ReturnsAsync(new ResponseDto<PlaylistDto> { Status = ResultStatus.NotFound, Message = "Playlist not found" });
 
             var response = await CreateSut().UpdatePlaylistAsync(8, new UpdatePlaylistDto());
 
             Assert.Multiple(() =>
             {
-                Assert.That(response, Is.TypeOf<BadRequestObjectResult>());
-                Assert.That(((BadRequestObjectResult)response).Value, Is.EqualTo("Playlist not found"));
+                Assert.That(response, Is.TypeOf<NotFoundObjectResult>());
+                Assert.That(((NotFoundObjectResult)response).Value, Is.EqualTo("Playlist not found"));
             });
         }
 

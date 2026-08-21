@@ -1,4 +1,5 @@
-﻿using CORE.Services.IServices;
+﻿using CORE.Enums;
+using CORE.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +19,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetSongAsync(int songId)
         {
             var result = await _songService.GetSongAsync(songId);
-            if (result.IsSuccess == false)
+            if (result.Status == ResultStatus.NotFound)
             {
                 return NotFound(result.Message);
             }

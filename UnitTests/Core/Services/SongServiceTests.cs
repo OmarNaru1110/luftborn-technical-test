@@ -1,3 +1,4 @@
+using CORE.Enums;
 using CORE.Services;
 using DATA.DataAccess.Repositories.IRepositories;
 using DATA.DataAccess.Repositories.UnitOfWork;
@@ -45,7 +46,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(result.Message, Is.Null);
                 var songs = result.Data!.ToList();
                 Assert.That(songs, Has.Count.EqualTo(2));
@@ -67,7 +68,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(result.Data, Is.Empty);
             });
         }
@@ -83,7 +84,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(result.Message, Is.Null);
                 Assert.That(result.Data!.Id, Is.EqualTo(5));
                 Assert.That(result.Data!.Title, Is.EqualTo("Bohemian Rhapsody"));
@@ -100,7 +101,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.NotFound));
                 Assert.That(result.Message, Is.EqualTo("Song not found."));
                 Assert.That(result.Data, Is.Null);
             });

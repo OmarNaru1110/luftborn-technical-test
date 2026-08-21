@@ -1,5 +1,6 @@
 ﻿using API.Services;
 using CORE.DTOs.Playlist;
+using CORE.Enums;
 using CORE.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace API.Controllers
         public async Task<IActionResult> CreatePlaylistAsync(CreatePlaylistDto dto)
         {
             var result = await _playlistService.CreatePlaylistAsync(dto, _currentUser.Id);
-            if(result.IsSuccess == false)
+            if(result.Status == ResultStatus.Invalid)
             {
                 return BadRequest(result.Message);
             }
@@ -33,7 +34,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetPlaylistAsync(int id)
         {
             var result = await _playlistService.GetPlaylistAsync(id);
-            if(result.IsSuccess == false)
+            if(result.Status == ResultStatus.NotFound)
             {
                 return NotFound(result.Message);
             }
@@ -43,9 +44,13 @@ namespace API.Controllers
         public async Task<IActionResult> AddSongsToPlaylist(int id, List<int>? songIds)
         {
             var result = await _playlistService.AddSongsToPlaylistAsync(id, songIds);
-            if (result.IsSuccess == false)
+            if (result.Status == ResultStatus.Invalid)
             {
                 return BadRequest(result.Message);
+            } 
+            else if (result.Status == ResultStatus.NotFound)
+            {
+                return NotFound(result.Message);
             }
             return Ok(result.Data);
         }
@@ -53,7 +58,7 @@ namespace API.Controllers
         public async Task<IActionResult> DeletePlaylistAsync(int id)
         {
             var result = await _playlistService.DeletePlaylistAsync(id);
-            if (result.IsSuccess == false)
+            if (result.Status == ResultStatus.NotFound)
             {
                 return NotFound(result.Message);
             }
@@ -63,9 +68,9 @@ namespace API.Controllers
         public async Task<IActionResult> UpdatePlaylistAsync(int id, UpdatePlaylistDto dto)
         {
             var result = await _playlistService.UpdatePlaylistAsync(id, dto);
-            if (result.IsSuccess == false)
+            if (result.Status == ResultStatus.NotFound)
             {
-                return BadRequest(result.Message);
+                return NotFound(result.Message);
             }
             return Ok(result.Data);
         }

@@ -1,4 +1,5 @@
 using CORE.DTOs.Playlist;
+using CORE.Enums;
 using CORE.Services;
 using DATA.DataAccess.Repositories.IRepositories;
 using DATA.DataAccess.Repositories.UnitOfWork;
@@ -57,7 +58,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
                 Assert.That(result.Message, Is.EqualTo("No songs provided"));
                 Assert.That(result.Data, Is.Null);
             });
@@ -70,7 +71,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
                 Assert.That(result.Message, Is.EqualTo("No songs provided"));
             });
         }
@@ -96,7 +97,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.NotFound));
                 Assert.That(result.Message, Is.EqualTo("Playlist not found"));
             });
             _unitOfWork.Verify(u => u.CommitAsync(), Times.Never);
@@ -112,7 +113,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(result.Data!.Id, Is.EqualTo(1));
                 Assert.That(result.Data!.Songs.Select(s => s.Id), Is.EqualTo(new[] { 1, 2 }));
             });
@@ -133,7 +134,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(result.Data!.Songs.Select(s => s.Id), Is.EqualTo(new[] { 1, 2, 3 }));
                 Assert.That(playlist.Songs!.Select(s => s.Id), Is.EqualTo(new[] { 1, 2, 3 }));
             });
@@ -153,7 +154,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(result.Data!.Songs.Select(s => s.Id), Is.EqualTo(new[] { 1 }));
                 Assert.That(playlist.Songs!, Has.Count.EqualTo(1));
             });
@@ -174,7 +175,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(playlist.Songs, Is.Not.Null);
                 Assert.That(result.Data!.Songs.Select(s => s.Id), Is.EqualTo(new[] { 7 }));
             });
@@ -211,7 +212,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
                 Assert.That(result.Message, Is.EqualTo("user Id is null"));
             });
             _playlists.Verify(r => r.AddOrUpdateAsync(It.IsAny<Playlist>()), Times.Never);
@@ -242,7 +243,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(result.Data, Is.Not.Null);
                 Assert.That(result.Data!.Id, Is.EqualTo(42));
                 Assert.That(result.Data!.Name, Is.EqualTo("Road Trip"));
@@ -276,7 +277,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(result.Data!.Songs, Is.Empty);
             });
         }
@@ -294,7 +295,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.NotFound));
                 Assert.That(result.Message, Is.EqualTo("Playlist not found"));
             });
             _playlists.Verify(r => r.Delete(It.IsAny<Playlist>()), Times.Never);
@@ -311,7 +312,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(result.Data, Is.Null);
             });
             _playlists.Verify(r => r.Delete(playlist), Times.Once);
@@ -331,7 +332,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.NotFound));
                 Assert.That(result.Message, Is.EqualTo("Playlist not found"));
                 Assert.That(result.Data, Is.Null);
             });
@@ -355,7 +356,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(result.Data!.Id, Is.EqualTo(8));
                 Assert.That(result.Data!.Name, Is.EqualTo("Chill"));
                 Assert.That(result.Data!.UserId, Is.EqualTo(21));
@@ -375,7 +376,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(result.Data!.Songs, Is.Empty);
             });
         }
@@ -393,7 +394,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.False);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.NotFound));
                 Assert.That(result.Message, Is.EqualTo("Playlist not found"));
             });
             _playlists.Verify(r => r.AddOrUpdateAsync(It.IsAny<Playlist>()), Times.Never);
@@ -410,7 +411,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(playlist.Name, Is.EqualTo("Brand New"));
                 Assert.That(result.Data!.Name, Is.EqualTo("Brand New"));
                 Assert.That(result.Data!.Id, Is.EqualTo(12));
@@ -429,7 +430,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(playlist.Name, Is.EqualTo("Keep Me"));
                 Assert.That(result.Data!.Name, Is.EqualTo("Keep Me"));
             });
@@ -445,7 +446,7 @@ namespace UnitTests.Core.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(result.IsSuccess, Is.True);
+                Assert.That(result.Status, Is.EqualTo(ResultStatus.Success));
                 Assert.That(playlist.Name, Is.Empty);
                 Assert.That(result.Data!.Name, Is.Empty);
             });
