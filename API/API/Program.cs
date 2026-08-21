@@ -1,3 +1,4 @@
+using API.Services;
 using CORE.Services;
 using CORE.Services.IServices;
 using DATA.DataAccess.Context;
@@ -37,6 +38,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ISongService, SongService>();
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
 var app = builder.Build();
 
