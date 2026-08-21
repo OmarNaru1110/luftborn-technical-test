@@ -141,6 +141,31 @@ namespace CORE.Services
             };
         }
 
+        public async Task<ResponseDto<object>> DeletePlaylistAsync(int playlistId)
+        {
+            _logger.LogInformation("Attempting to delete playlist with Id {PlaylistId}", playlistId);
+            var playlist = await _unitOfWork.Playlists.GetAsync(playlistId);
+            if (playlist == null)
+            {
+                _logger.LogWarning($"Playlist with Id {playlistId} not found.");
+                return new ResponseDto<object>
+                {
+                    IsSuccess = false,
+                    Message = "Playlist not found"
+                };
+            }
+
+            _unitOfWork.Playlists.Delete(playlist);
+            await _unitOfWork.CommitAsync();
+
+            _logger.LogInformation("Playlist with Id {PlaylistId} deleted successfully.", playlistId);
+            return new ResponseDto<object>
+            {
+                IsSuccess = true,
+                Data = null
+            };
+        }
+
         public async Task<ResponseDto<PlaylistDto>> GetPlaylistAsync(int id)
         {
             _logger.LogInformation($"Fetching playlist with Id {id}");

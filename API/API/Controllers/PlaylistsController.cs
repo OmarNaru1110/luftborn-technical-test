@@ -49,5 +49,15 @@ namespace API.Controllers
             }
             return Ok(result.Data);
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePlaylistAsync(int id)
+        {
+            var result = await _playlistService.DeletePlaylistAsync(id);
+            if (result.IsSuccess == false)
+            {
+                return NotFound(result.Message);
+            }
+            return NoContent();
+        }
     }
 }
