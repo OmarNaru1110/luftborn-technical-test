@@ -11,6 +11,7 @@ namespace DATA.DataAccess.Context.Configurations
     {
         public void Configure(EntityTypeBuilder<Playlist> builder)
         {
+            builder.HasIndex(p => p.UserId);
             builder.ToTable("Playlists");
         }
     }
