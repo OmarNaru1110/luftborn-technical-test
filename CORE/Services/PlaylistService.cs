@@ -4,7 +4,9 @@ using CORE.Services.IServices;
 using DATA.DataAccess.Repositories.UnitOfWork;
 using DATA.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -19,6 +21,90 @@ namespace CORE.Services
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
+        }
+
+        public async Task<ResponseDto<PlaylistDto>> AddSongsToPlaylistAsync(int playlistId, List<int>? songIds)
+        {
+            _logger.LogInformation("Adding songs to playlist {PlaylistId}", playlistId);
+            if (songIds.IsNullOrEmpty())
+            {
+                _logger.LogWarning("No songs provided for playlist {PlaylistId}", playlistId);
+                return new ResponseDto<PlaylistDto>
+                {
+                    IsSuccess = false,
+                    Message = "No songs provided"
+                };
+            }
+
+            var playlist = await _unitOfWork.Playlists.GetAsync(playlistId, new string[] { nameof(Playlist.Songs) });
+
+            if (playlist == null)
+            {
+                _logger.LogWarning($"Playlist with Id {playlistId} not found.");
+                return new ResponseDto<PlaylistDto>
+                {
+                    IsSuccess = false,
+                    Message = "Playlist not found"
+                };
+            }
+
+            var playlistSongIds = playlist.Songs?.Select(s => s.Id).ToList() ?? [];
+
+            var newSongIds = songIds
+                .Except(playlistSongIds)
+                .ToList();
+
+            if (newSongIds.Count == 0)
+            {
+                _logger.LogInformation(
+                    "All requested songs are already in playlist {PlaylistId}",
+                    playlistId);
+
+                return new ResponseDto<PlaylistDto>
+                {
+                    IsSuccess = true,
+                    Data = new PlaylistDto
+                    {
+                        Id = playlist.Id,
+                        Name = playlist.Name,
+                        Songs = playlist.Songs?.Select(s => new SongDto
+                        {
+                            Id = s.Id,
+                            Title = s.Title,
+                            Artist = s.Artist
+                        }).ToList() ?? []
+                    }
+                };
+            }
+
+            var songs = await _unitOfWork.Songs.GetByIdsAsync(newSongIds);
+            playlist.Songs ??= [];
+            foreach (var song in songs)
+            {
+                playlist.Songs.Add(song);
+            }
+
+            await _unitOfWork.CommitAsync();
+
+            _logger.LogInformation(
+                "Successfully added {Count} songs to playlist {PlaylistId}",
+                songs.Count(),
+                playlistId);
+            return new ResponseDto<PlaylistDto>
+            {
+                IsSuccess = true,
+                Data = new PlaylistDto
+                {
+                    Id = playlist.Id,
+                    Name = playlist.Name,
+                    Songs = playlist.Songs.Select(s => new SongDto
+                    {
+                        Id = s.Id,
+                        Title = s.Title,
+                        Artist = s.Artist
+                    }).ToList()
+                }
+            };
         }
 
         public async Task<ResponseDto<PlaylistDto>> CreatePlaylistAsync(CreatePlaylistDto dto, int? userId)

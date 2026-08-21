@@ -39,5 +39,15 @@ namespace API.Controllers
             }
             return Ok(result.Data);
         }
+        [HttpPost("{id}/songs")]
+        public async Task<IActionResult> AddSongsToPlaylist(int id, List<int>? songIds)
+        {
+            var result = await _playlistService.AddSongsToPlaylistAsync(id, songIds);
+            if (result.IsSuccess == false)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Data);
+        }
     }
 }
