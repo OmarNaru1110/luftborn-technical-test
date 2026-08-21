@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="../CORE/CORE.csproj" Id="0ef4927d-c0ba-4ee4-8bad-9c0a9525a2aa" />
+  <Project Path="../DATA/DATA.csproj" Id="5f2180e3-26bc-4e3a-be02-6b08b80313c3" />
+  <Project Path="../UnitTests/UnitTests.csproj" Id="15fe2186-222b-403d-a40d-78e37fc76e8d" />
+  <Project Path="API/API.csproj" />
+</Solution>
