@@ -98,6 +98,7 @@ namespace CORE.Services
                 {
                     Id = playlist.Id,
                     Name = playlist.Name,
+                    UserId = playlist.UserId,
                     Songs = playlist.Songs.Select(s => new SongDto
                     {
                         Id = s.Id,
