@@ -1,4 +1,7 @@
+using CORE.Services;
+using CORE.Services.IServices;
 using DATA.DataAccess.Context;
+using DATA.DataAccess.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 
@@ -31,6 +34,9 @@ builder.Logging.AddDebug();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<ISongService, SongService>();
 
 var app = builder.Build();
 
