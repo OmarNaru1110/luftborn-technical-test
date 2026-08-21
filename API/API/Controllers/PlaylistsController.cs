@@ -29,5 +29,15 @@ namespace API.Controllers
             }
             return Ok(result.Data);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPlaylistAsync(int id)
+        {
+            var result = await _playlistService.GetPlaylistAsync(id);
+            if(result.IsSuccess == false)
+            {
+                return NotFound(result.Message);
+            }
+            return Ok(result.Data);
+        }
     }
 }

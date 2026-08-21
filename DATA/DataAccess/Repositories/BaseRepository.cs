@@ -60,6 +60,9 @@ namespace DATA.DataAccess.Repositories
         {
             T? entity = await _context.Set<T>().FindAsync(id);
 
+            if (entity == null)
+                return null;
+
             if (includes != null)
                 foreach (var include in includes)
                     await _context.Entry(entity).Collection(include).LoadAsync();
