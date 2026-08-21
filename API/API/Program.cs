@@ -4,7 +4,7 @@ using CORE.Services.IServices;
 using DATA.DataAccess.Context;
 using DATA.DataAccess.Repositories.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,19 +22,34 @@ options.UseSqlServer(
     )
 );
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "luftborn", Version = "v1" });
-});
-
 // Add services to the container.
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
-builder.Services.AddControllers();
+// Reject numeric strings ("10") for number fields, and make the OpenAPI
+// generator emit plain "type": "integer" schemas instead of integer|string.
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.Strict;
+    });
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.NumberHandling = JsonNumberHandling.Strict;
+});
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+{
+    options.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_0;
+
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        document.Info.Title = "luftborn";
+        return Task.CompletedTask;
+    });
+});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ISongService, SongService>();
@@ -82,21 +97,17 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.MapOpenApi();
+
+app.UseSwaggerUI(options =>
 {
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-else
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
+    options.SwaggerEndpoint("/openapi/v1.json", "v1");
+
+    if (!app.Environment.IsDevelopment())
     {
-        options.SwaggerEndpoint("/openapi/v1.json", "v1");
         options.RoutePrefix = string.Empty;
-    });
-}
+    }
+});
 
 app.UseHttpsRedirection();
 
