@@ -7,7 +7,7 @@ namespace CORE.Services.IServices
 {
     public interface ISongService
     {
-        Task<SongDto?> GetSongAsync(int songId);
-        Task<IEnumerable<SongDto>> GetAllSongsAsync();
+        Task<ResponseDto<SongDto>> GetSongAsync(int songId);
+        Task<ResponseDto<IEnumerable<SongDto>>> GetAllSongsAsync();
     }
 }

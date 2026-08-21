@@ -17,18 +17,18 @@ namespace API.Controllers
         [HttpGet("{songId}")]
         public async Task<IActionResult> GetSongAsync(int songId)
         {
-            var song = await _songService.GetSongAsync(songId);
-            if (song == null)
+            var result = await _songService.GetSongAsync(songId);
+            if (result.IsSuccess == false)
             {
-                return NotFound();
+                return NotFound(result.Message);
             }
-            return Ok(song);
+            return Ok(result.Data);
         }
         [HttpGet]
         public async Task<IActionResult> GetAllSongsAsync()
         {
-            var songs = await _songService.GetAllSongsAsync();
-            return Ok(songs);
+            var result = await _songService.GetAllSongsAsync();
+            return Ok(result.Data);
         }
     }
 }

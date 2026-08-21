@@ -19,7 +19,7 @@ namespace CORE.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<SongDto>> GetAllSongsAsync()
+        public async Task<ResponseDto<IEnumerable<SongDto>>> GetAllSongsAsync()
         {
             _logger.LogInformation("Fetching all songs");
             var songDtos = (await _unitOfWork.Songs.GetAllAsync())
@@ -30,10 +30,10 @@ namespace CORE.Services
                     Artist = song.Artist
                 })
                 .ToList();
-            return songDtos;
+            return new ResponseDto<IEnumerable<SongDto>> { IsSuccess = true, Data = songDtos };
         }
 
-        public async Task<SongDto?> GetSongAsync(int songId)
+        public async Task<ResponseDto<SongDto>> GetSongAsync(int songId)
         {
             _logger.LogInformation($"Fetching song with ID: {songId}");
             
@@ -41,13 +41,16 @@ namespace CORE.Services
             if(song == null)
             {
                 _logger.LogWarning($"Song with ID: {songId} not found.");
-                return null;
+                return new ResponseDto<SongDto> { IsSuccess = false, Message = "Song not found." };
             }
-            return new SongDto
-            {
-                Id = song.Id,
-                Title = song.Title,
-                Artist = song.Artist
+            return new ResponseDto<SongDto> { 
+                IsSuccess = true, 
+                Data = new SongDto
+                {
+                    Id = song.Id,
+                    Title = song.Title,
+                    Artist = song.Artist
+                } 
             };
         }
     }
