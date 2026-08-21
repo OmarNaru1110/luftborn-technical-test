@@ -67,6 +67,18 @@ namespace DATA.DataAccess.Repositories
             return entity;
         }
 
+        public async Task<IEnumerable<T>> GetByIdsAsync(IEnumerable<int> ids)
+        {
+            var idSet = ids.ToHashSet();
+
+            if (idSet.Count == 0)
+                return [];
+
+            return await _context.Set<T>()
+                .Where(e => idSet.Contains(EF.Property<int>(e, "Id")))
+                .ToListAsync();
+        }
+
         public async Task<T?> GetFirstAsync() => await _context.Set<T>().FirstOrDefaultAsync();
 
         public IQueryable<T> Where(Expression<Func<T, bool>> criteria, string[] includes = null)
