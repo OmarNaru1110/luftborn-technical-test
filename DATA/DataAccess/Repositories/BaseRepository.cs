@@ -48,6 +48,12 @@ namespace DATA.DataAccess.Repositories
             return await query.SingleOrDefaultAsync(criteria);
         }
 
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            IQueryable<T> query = _context.Set<T>();
+            return await query.ToListAsync();
+        }
+
         public async Task<T?> GetAsync(int id) => await _context.Set<T>().FindAsync(id);
 
         public async Task<T?> GetAsync(int id, string[] includes = null)

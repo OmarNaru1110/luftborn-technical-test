@@ -19,6 +19,20 @@ namespace CORE.Services
             _logger = logger;
         }
 
+        public async Task<IEnumerable<SongDto>> GetAllSongsAsync()
+        {
+            _logger.LogInformation("Fetching all songs");
+            var songDtos = (await _unitOfWork.Songs.GetAllAsync())
+                .Select(song => new SongDto
+                {
+                    Id = song.Id,
+                    Title = song.Title,
+                    Artist = song.Artist
+                })
+                .ToList();
+            return songDtos;
+        }
+
         public async Task<SongDto?> GetSongAsync(int songId)
         {
             _logger.LogInformation($"Fetching song with ID: {songId}");

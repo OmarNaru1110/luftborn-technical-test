@@ -24,5 +24,11 @@ namespace API.Controllers
             }
             return Ok(song);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllSongsAsync()
+        {
+            var songs = await _songService.GetAllSongsAsync();
+            return Ok(songs);
+        }
     }
 }

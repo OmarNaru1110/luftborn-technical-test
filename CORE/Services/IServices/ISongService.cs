@@ -8,5 +8,6 @@ namespace CORE.Services.IServices
     public interface ISongService
     {
         Task<SongDto?> GetSongAsync(int songId);
+        Task<IEnumerable<SongDto>> GetAllSongsAsync();
     }
 }
