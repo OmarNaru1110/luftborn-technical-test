@@ -59,5 +59,15 @@ namespace API.Controllers
             }
             return NoContent();
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdatePlaylistAsync(int id, UpdatePlaylistDto dto)
+        {
+            var result = await _playlistService.UpdatePlaylistAsync(id, dto);
+            if (result.IsSuccess == false)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok(result.Data);
+        }
     }
 }

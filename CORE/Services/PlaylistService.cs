@@ -200,5 +200,34 @@ namespace CORE.Services
                 }
             };
         }
+
+        public async Task<ResponseDto<PlaylistDto>> UpdatePlaylistAsync(int playlistId, UpdatePlaylistDto dto)
+        {
+            _logger.LogInformation("Updating playlist with Id {PlaylistId}", playlistId);
+            var playlist = await _unitOfWork.Playlists.GetAsync(playlistId);
+
+            if (playlist == null)
+            {
+                _logger.LogWarning($"Playlist with Id {playlistId} not found.");
+                return new ResponseDto<PlaylistDto>
+                {
+                    IsSuccess = false,
+                    Message = "Playlist not found"
+                };
+            }
+
+            playlist.Name = dto.Name ?? playlist.Name;
+
+            await _unitOfWork.Playlists.AddOrUpdateAsync(playlist);
+            await _unitOfWork.CommitAsync();
+
+            var result = await GetPlaylistAsync(playlist.Id);
+
+            return new ResponseDto<PlaylistDto>
+            {
+                IsSuccess = true,
+                Data = result.Data
+            };
+        }
     }
 }
