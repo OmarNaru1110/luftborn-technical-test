@@ -323,6 +323,56 @@ curl -k -X DELETE https://localhost:7065/api/playlists/1
 
 ---
 
+### 8. Get all playlists
+
+`GET /api/playlists`
+
+Returns every playlist owned by the current user (resolved by `ICurrentUser`),
+including their songs.
+
+**Example Request**
+
+```http
+GET /api/playlists HTTP/1.1
+Host: localhost:7065
+```
+
+```bash
+curl -k https://localhost:7065/api/playlists
+```
+
+**Response — `200 OK`**
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Road Trip",
+    "userId": 1,
+    "createdAt": "2026-08-22T10:15:30.1234567Z",
+    "songs": [
+      { "id": 1, "title": "Bohemian Rhapsody", "artist": "Queen" },
+      { "id": 3, "title": "Hotel California", "artist": "Eagles" }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Chill Vibes",
+    "userId": 1,
+    "createdAt": "2026-08-22T11:00:00.0000000Z",
+    "songs": []
+  }
+]
+```
+
+**Response — `401 Unauthorized`** (no current user)
+
+```json
+"Authentication is required to fetch playlists."
+```
+
+---
+
 ## Status Code Summary
 
 | Code | Meaning                                                        |
@@ -331,4 +381,5 @@ curl -k -X DELETE https://localhost:7065/api/playlists/1
 | 201  | Playlist created                                               |
 | 204  | Playlist deleted successfully                                  |
 | 400  | Invalid input / failed validation                              |
+| 401  | Authentication required                                        |
 | 404  | Song or playlist not found                                     |
