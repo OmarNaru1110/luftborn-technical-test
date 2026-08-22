@@ -108,3 +108,63 @@ DATA/     EF Core DbContext, models, migrations (SQL Server)
 UnitTests NUnit tests
 docs/     API documentation and diagrams
 ```
+
+---
+
+## Database
+
+The schema is defined code-first with EF Core in the `DATA` project and applied to SQL Server through migrations on startup.
+
+### Tables
+
+**Songs**
+
+| Column | Type          | Constraints  |
+| ------ | ------------- | ------------ |
+| Id     | int           | PK, identity |
+| Title  | nvarchar(max) | required     |
+| Artist | nvarchar(max) | required     |
+
+**Playlists**
+
+| Column    | Type          | Constraints  |
+| --------- | ------------- | ------------ |
+| Id        | int           | PK, identity |
+| Name      | nvarchar(max) | required     |
+| UserId    | int           | indexed      |
+| CreatedAt | datetime2     |              |
+
+**PlaylistSongs** (join table)
+
+| Column     | Type | Constraints                                     |
+| ---------- | ---- | ----------------------------------------------- |
+| PlaylistId | int  | composite PK, FK → Playlists.Id, cascade delete |
+| SongId     | int  | composite PK, FK → Songs.Id, cascade delete     |
+
+### Relationships
+
+- **Playlists ↔ Songs** — many-to-many, implemented through the `PlaylistSongs` join table.
+- **Cascade deletes** — deleting a playlist removes its rows from `PlaylistSongs`, and deleting a song detaches it from every playlist that contained it. The songs/playlists themselves are never deleted through the relationship.
+
+```
+Playlists 1 ──── * PlaylistSongs * ──── 1 Songs
+```
+
+### Indexes
+
+| Index                   | Table         | Purpose                                                                                     |
+| ----------------------- | ------------- | ------------------------------------------------------------------------------------------- |
+| PK (clustered)          | all tables    | fast lookups by primary key; `PlaylistSongs` uses a composite key `(PlaylistId, SongId)`     |
+| `IX_Playlists_UserId`   | Playlists     | the most common query pattern: fetch all playlists for a user                                |
+| `IX_PlaylistSongs_SongId` | PlaylistSongs | reverse lookup ("which playlists contain this song") plus efficient FK cascade deletes      |
+
+The composite primary key on `PlaylistSongs` also serves as an index for the forward direction ("all songs in playlist X").
+
+### Why a relational database?
+
+I chose an RDBMS (SQL Server) over NoSQL alternatives for several reasons:
+
+- **Great fit with EF Core**: EF Core's LINQ-to-SQL translation, change tracking, and migrations are first-class for relational databases, which keeps data access clean and type-safe.
+- **Familiarity**: relational databases are what I have the most experience with, so development was faster.
+- **Simple access patterns**: relationships here are straightforward and queries need very few joins, so there's no need for denormalization or the flexibility of a document store.
+- **Highly structured data**: songs and playlists have fixed, well-defined shapes; a relational schema enforces that structure with strong typing and referential integrity via foreign keys.
