@@ -76,14 +76,7 @@ The password must satisfy SQL Server complexity rules (min 8 chars, uppercase, l
 
 Requirements: .NET SDK 10 and a reachable SQL Server instance.
 
-1. Set the connection string (environment variable or `dotnet user-secrets`):
-
-   ```bash
-   # PowerShell
-   $env:SQLServer_ConnectionString = "Server=localhost;Database=LuftbornDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True"
-   ```
-
-   Alternatively, copy `API/API/.env.example` to `API/API/.env` and fill in your connection string (loaded automatically by DotNetEnv).
+1. copy `API/API/.env.example` to `API/API/.env` and fill in your connection string (loaded automatically by DotNetEnv).
 
 2. Run the API (migrations + seed run automatically):
 
