@@ -3,9 +3,9 @@
 ASP.NET Core (.NET 10) Web API for a songs/playlists catalog, backed by SQL Server (EF Core).
 The whole stack is containerized: one command starts both the API and a SQL Server database.
 
-Full endpoint documentation: [docs/API.md](docs/API.md)
+## API overview
 
----
+Full API documentation: [docs/API.md](docs/API.md)
 
 ## Requirements
 
@@ -109,8 +109,6 @@ UnitTests NUnit tests
 docs/     API documentation and diagrams
 ```
 
----
-
 ## Database
 
 The schema is defined code-first with EF Core in the `DATA` project and applied to SQL Server through migrations on startup.
@@ -168,3 +166,41 @@ I chose an RDBMS (SQL Server) over NoSQL alternatives for several reasons:
 - **Familiarity**: relational databases are what I have the most experience with, so development was faster.
 - **Simple access patterns**: relationships here are straightforward and queries need very few joins, so there's no need for denormalization or the flexibility of a document store.
 - **Highly structured data**: songs and playlists have fixed, well-defined shapes; a relational schema enforces that structure with strong typing and referential integrity via foreign keys.
+
+## Tech stack
+
+- ASP.NET Core (.NET 10) Web API
+- EF Core + SQL Server 2022 (code-first migrations)
+- NUnit unit tests
+- Docker / Docker Compose
+
+## Architecture
+
+Classic three-layer layout:
+
+- **API** — controllers, DTOs, DI registration; thin HTTP layer
+- **CORE** — business logic via services (`SongService`, `PlaylistService`)
+- **DATA** — EF Core `AppDbContext`, entity configurations, generic repository + unit of work
+
+Controllers depend on services, services on `IUnitOfWork`, keeping HTTP concerns separate from persistence.
+
+> **Simulated auth:** there is no real authentication in this test project. Playlists belong to users via `ICurrentUser`, whose only implementation (`API/API/Services/CurrentUser.cs`) is a stub registered in DI that always returns user id `1`. Replacing that single class with one that reads the id from a JWT/session is all real auth would need.
+
+## Testing
+
+Unit tests (NUnit) cover controllers, services, and the repository layer. They use an EF Core InMemory provider and Moq, so no database or Docker is required to run them.
+
+From the repository root:
+
+```bash
+dotnet test UnitTests
+```
+
+## AI-assisted development
+
+This project was developed with assistance from AI coding agents. The full conversation logs are preserved in [ai-transcripts/](ai-transcripts/)
+
+Models used:
+
+- **big-pickle**
+- **Gemini 3.1 Pro**
