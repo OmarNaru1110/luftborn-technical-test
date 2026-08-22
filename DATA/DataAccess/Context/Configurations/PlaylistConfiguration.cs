@@ -11,7 +11,11 @@ namespace DATA.DataAccess.Context.Configurations
     {
         public void Configure(EntityTypeBuilder<Playlist> builder)
         {
+            builder.Property(p => p.Name)
+                .HasMaxLength(100);
+
             builder.HasIndex(p => p.UserId);
+            
             builder.ToTable("Playlists");
         }
     }

@@ -120,15 +120,15 @@ The schema is defined code-first with EF Core in the `DATA` project and applied 
 | Column | Type          | Constraints  |
 | ------ | ------------- | ------------ |
 | Id     | int           | PK, identity |
-| Title  | nvarchar(max) | required     |
-| Artist | nvarchar(max) | required     |
+| Title  | nvarchar(100) | required     |
+| Artist | nvarchar(100) | required     |
 
 **Playlists**
 
 | Column    | Type          | Constraints  |
 | --------- | ------------- | ------------ |
 | Id        | int           | PK, identity |
-| Name      | nvarchar(max) | required     |
+| Name      | nvarchar(100) | required     |
 | UserId    | int           | indexed      |
 | CreatedAt | datetime2     |              |
 

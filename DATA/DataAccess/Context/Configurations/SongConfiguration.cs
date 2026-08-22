@@ -11,6 +11,12 @@ namespace DATA.DataAccess.Context.Configurations
     {
         public void Configure(EntityTypeBuilder<Song> builder)
         {
+            builder.Property(s => s.Title)
+                .HasMaxLength(100);
+            
+            builder.Property(s => s.Artist)
+                .HasMaxLength(100);
+
             builder.HasMany(s=> s.Playlists)
                 .WithMany(p => p.Songs)
                 .UsingEntity<PlaylistSong>(
