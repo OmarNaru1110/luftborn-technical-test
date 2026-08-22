@@ -74,5 +74,16 @@ namespace API.Controllers
             }
             return Ok(result.Data);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetPlaylistsAsync()
+        {
+            int userId = _currentUser.Id;
+            var result = await _playlistService.GetPlaylistsAsync(userId);
+            if (result.Status == ResultStatus.Unauthorized)
+            {
+                return Unauthorized(result.Message);
+            }
+            return Ok(result.Data);
+        }
     }
 }

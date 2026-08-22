@@ -10,6 +10,7 @@ namespace CORE.Services.IServices
     {
         Task<ResponseDto<PlaylistDto>> CreatePlaylistAsync(CreatePlaylistDto dto, int? userId);
         Task<ResponseDto<PlaylistDto>> GetPlaylistAsync(int id);
+        Task<ResponseDto<List<PlaylistDto>>> GetPlaylistsAsync(int? userId);
         Task<ResponseDto<PlaylistDto>> AddSongsToPlaylistAsync(int playlistId, List<int>? songIds);
         Task<ResponseDto<PlaylistDto>> UpdatePlaylistAsync(int playlistId, UpdatePlaylistDto dto);
         Task<ResponseDto<object>> DeletePlaylistAsync(int playlistId);

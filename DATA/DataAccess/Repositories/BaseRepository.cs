@@ -37,6 +37,19 @@ namespace DATA.DataAccess.Repositories
             _context.Set<T>().Remove(entity);
         }
 
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> criteria, string[] includes = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            query = query.Where(criteria);
+
+            if(includes != null)
+                foreach (var include in includes)
+                    query = query.Include(include);
+                    
+            return await query.ToListAsync();
+        }
+
         public async Task<T> FindAsync(Expression<Func<T, bool>> criteria, string[] includes)
         {
             IQueryable<T> query = _context.Set<T>();

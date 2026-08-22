@@ -203,6 +203,42 @@ namespace CORE.Services
             };
         }
 
+        public async Task<ResponseDto<List<PlaylistDto>>> GetPlaylistsAsync(int? userId)
+        {
+            _logger.LogInformation("Fetching playlists");
+
+            if(userId == null)
+            {
+                _logger.LogWarning("User Id is null. Cannot fetch playlists.");
+                return new ResponseDto<List<PlaylistDto>>
+                {
+                    Status = ResultStatus.Unauthorized,
+                    Message = "Authentication is required to fetch playlists."
+                };
+            }
+            var playlists = await _unitOfWork.Playlists.FindAllAsync(p => p.UserId == userId, new string[] { nameof(Playlist.Songs) });
+
+            var playlistDtos = playlists.Select(playlist => new PlaylistDto
+            {
+                Id = playlist.Id,
+                UserId = playlist.UserId,
+                Name = playlist.Name,
+                CreatedAt = playlist.CreatedAt,
+                Songs = playlist.Songs?.Select(s => new SongDto
+                {
+                    Id = s.Id,
+                    Title = s.Title,
+                    Artist = s.Artist
+                }).ToList() ?? []
+            }).ToList();
+
+            return new ResponseDto<List<PlaylistDto>>
+            {
+                Status = ResultStatus.Success,
+                Data = playlistDtos
+            };
+        }
+
         public async Task<ResponseDto<PlaylistDto>> UpdatePlaylistAsync(int playlistId, UpdatePlaylistDto dto)
         {
             _logger.LogInformation("Updating playlist with Id {PlaylistId}", playlistId);
