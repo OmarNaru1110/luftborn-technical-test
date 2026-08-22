@@ -89,7 +89,7 @@ Requirements: .NET SDK 10 and a reachable SQL Server instance.
 Run the unit tests:
 
 ```bash
-dotnet test UnitTests
+dotnet test Tests
 ```
 
 ## Project structure
@@ -98,7 +98,7 @@ dotnet test UnitTests
 API/      ASP.NET Core Web API (controllers, services, Program.cs)
 CORE/     Domain/application services
 DATA/     EF Core DbContext, models, migrations (SQL Server)
-UnitTests NUnit tests
+Tests     NUnit unit + integration tests
 docs/     API documentation and diagrams
 ```
 
@@ -185,12 +185,21 @@ Controllers depend on services, services on `IUnitOfWork`, keeping HTTP concerns
 
 ## Testing
 
-Unit tests (NUnit) cover controllers, services, and the repository layer. They use an EF Core InMemory provider and Moq, so no database or Docker is required to run them.
+The `Tests` project contains both kinds of tests (NUnit), runnable with a single command and no database or Docker required:
+
+- **Unit tests** cover controllers, services, and the repository layer. They use an EF Core InMemory provider and Moq.
+- **Integration tests** (`Tests/Integration/`) boot the real API in-memory via `WebApplicationFactory` and exercise it over HTTP, backed by an in-memory SQLite database (real relational behavior: foreign keys, cascade deletes, composite keys). Each test gets a fresh application and database.
 
 From the repository root:
 
 ```bash
-dotnet test UnitTests
+dotnet test Tests
+```
+
+Run only the integration tests:
+
+```bash
+dotnet test Tests --filter "FullyQualifiedName~Tests.Integration"
 ```
 
 ## AI-assisted development

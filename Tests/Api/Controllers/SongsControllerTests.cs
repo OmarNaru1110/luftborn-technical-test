@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UnitTests.Api.Controllers
+namespace Tests.Api.Controllers
 {
     public class SongsControllerTests
     {
