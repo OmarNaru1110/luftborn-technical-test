@@ -112,6 +112,10 @@ docs/     API documentation and diagrams
 ## Database
 
 The schema is defined code-first with EF Core in the `DATA` project and applied to SQL Server through migrations on startup.
+### ERD
+![ERD](docs/erd.png)
+### Mapping Diagram
+![Mapping Diagram](docs/mapping.png)
 
 ### Tables
 
